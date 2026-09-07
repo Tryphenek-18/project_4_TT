@@ -45,7 +45,13 @@ router.get("/", async (req, res) => {
       ORDER BY p.id`;
 
     const [rows] = await query(sql, params);
-    res.json({ count: rows.length, products: rows });
+    // DECIMAL columns come back as strings; the frontend expects numbers.
+    const products = rows.map(r => ({
+      ...r,
+      price: parseFloat(r.price),
+      rating: parseFloat(r.rating)
+    }));
+    res.json({ count: products.length, products });
   } catch (err) {
     console.error("[api] GET /api/products failed:", err.message);
     res.status(500).json({ error: "Database error" });
@@ -68,7 +74,8 @@ router.get("/:id", async (req, res) => {
     if (rows.length === 0) {
       return res.status(404).json({ error: `Product ${id} not found` });
     }
-    res.json(rows[0]);
+    const r = rows[0];
+    res.json({ ...r, price: parseFloat(r.price), rating: parseFloat(r.rating) });
   } catch (err) {
     console.error("[api] GET /api/products/:id failed:", err.message);
     res.status(500).json({ error: "Database error" });
