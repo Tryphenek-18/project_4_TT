@@ -1,5 +1,5 @@
 /* =========================================================
-   ShopVerse — DB bootstrap
+   SHOPME — DB bootstrap
    Creates database, tables and seed data if missing.
    Called automatically by server.js at startup.
    ========================================================= */
@@ -14,14 +14,12 @@ const CFG = {
 };
 
 async function bootstrap() {
-  // 1) Connect WITHOUT a database and create it if missing.
   const conn = await mysql.createConnection({ ...CFG, multipleStatements: true });
   await conn.query(
     `CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`
   );
   await conn.query(`USE \`${DB_NAME}\``);
 
-  // 2) Create tables if missing.
   await conn.query(`
     CREATE TABLE IF NOT EXISTS categories (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,14 +60,24 @@ async function bootstrap() {
       INDEX idx_products_shop (shop_id)
     ) ENGINE=InnoDB;
 
+    CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(120) NOT NULL,
+      email VARCHAR(200) NOT NULL UNIQUE,
+      password_hash VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB;
+
     CREATE TABLE IF NOT EXISTS orders (
       id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NULL,
       customer_name VARCHAR(120) NOT NULL DEFAULT '',
       customer_email VARCHAR(200) NOT NULL DEFAULT '',
       subtotal DECIMAL(10,2) NOT NULL,
       shipping DECIMAL(10,2) NOT NULL DEFAULT 0,
       total DECIMAL(10,2) NOT NULL,
-      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
     ) ENGINE=InnoDB;
 
     CREATE TABLE IF NOT EXISTS order_items (
@@ -85,13 +93,9 @@ async function bootstrap() {
     ) ENGINE=InnoDB;
   `);
 
-  // 3) Seed only if empty.
   const [[{ c: catCount }]] = await conn.query("SELECT COUNT(*) AS c FROM categories");
   if (catCount === 0) {
-    await conn.query(
-      "INSERT INTO categories (name, icon, color) VALUES ?",
-      [CATEGORIES]
-    );
+    await conn.query("INSERT INTO categories (name, icon, color) VALUES ?", [CATEGORIES]);
   }
 
   const [[{ c: shopCount }]] = await conn.query("SELECT COUNT(*) AS c FROM shops");
@@ -106,7 +110,6 @@ async function bootstrap() {
 
   const [[{ c: prodCount }]] = await conn.query("SELECT COUNT(*) AS c FROM products");
   if (prodCount === 0) {
-    // Resolve shop/category names to ids, then bulk insert.
     const [[shops], [cats]] = await Promise.all([
       conn.query("SELECT id, name FROM shops"),
       conn.query("SELECT id, name FROM categories")
@@ -125,7 +128,6 @@ async function bootstrap() {
 
   await conn.end();
 
-  // 4) Initialise the shared pool (bound to the DB) and report.
   const { initPool, query } = require("./pool");
   initPool();
   const [[p]] = await query("SELECT COUNT(*) AS c FROM products");

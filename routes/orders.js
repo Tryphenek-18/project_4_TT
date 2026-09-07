@@ -18,7 +18,6 @@ router.post("/", async (req, res) => {
   try {
     await conn.beginTransaction();
 
-    // Lock the referenced product rows and validate each line.
     const lineItems = [];
     let subtotal = 0;
 
@@ -49,19 +48,17 @@ router.post("/", async (req, res) => {
     }
 
     subtotal = Math.round(subtotal * 100) / 100;
-    const shipping = 0; // free shipping in this demo
+    const shipping = 0;
     const total = Math.round((subtotal + shipping) * 100) / 100;
 
+    const userId = req.session.user ? req.session.user.id : null;
+    const customerName = (customer.name || (req.session.user ? req.session.user.name : "")).slice(0, 120);
+    const customerEmail = (customer.email || (req.session.user ? req.session.user.email : "")).slice(0, 200);
+
     const [orderResult] = await conn.query(
-      `INSERT INTO orders (customer_name, customer_email, subtotal, shipping, total)
-       VALUES (?, ?, ?, ?, ?)`,
-      [
-        String(customer.name || "").slice(0, 120),
-        String(customer.email || "").slice(0, 200),
-        subtotal,
-        shipping,
-        total
-      ]
+      `INSERT INTO orders (user_id, customer_name, customer_email, subtotal, shipping, total)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [userId, customerName, customerEmail, subtotal, shipping, total]
     );
 
     const orderId = orderResult.insertId;
@@ -78,10 +75,7 @@ router.post("/", async (req, res) => {
       order: {
         id: orderId,
         items: lineItems,
-        customer: {
-          name: String(customer.name || "").slice(0, 120),
-          email: String(customer.email || "").slice(0, 200)
-        },
+        customer: { name: customerName, email: customerEmail },
         subtotal,
         shipping,
         total,
@@ -114,6 +108,7 @@ router.get("/", async (req, res) => {
     }
     const result = orders.map(o => ({
       id: o.id,
+      userId: o.user_id,
       items: byOrder[o.id] || [],
       customer: { name: o.customer_name, email: o.customer_email },
       subtotal: parseFloat(o.subtotal),

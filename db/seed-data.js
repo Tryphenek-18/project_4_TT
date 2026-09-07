@@ -1,13 +1,10 @@
 /* =========================================================
-   ShopVerse — DB bootstrap
-   Creates the database, tables and seed data if missing.
-   Runs automatically when server.js starts.
+   SHOPME — DB seed data
    ========================================================= */
 const mysql = require("mysql2/promise");
 
-const DB_NAME = process.env.DB_NAME || "shopverse";
+const DB_NAME = process.env.DB_NAME || "shopme";
 
-// Real Unsplash photo URLs (verified HTTP 200).
 const IMG = (id, w = 640, h = 480) =>
   `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format`;
 
@@ -35,11 +32,10 @@ const OFFERS = [
   ["Flash Discounts", "Daily deals updated every hour", "bi-stopwatch", "#f59e0b"]
 ];
 
-// name, shop, category, price, rating, imageId, description, availability
 const PRODUCTS = [
   ["Wireless Noise-Cancelling Headphones", "TechGadget", "Electronics", 129.99, 4.6, "1505740420928-5e560c06d30e", "Premium over-ear headphones with active noise cancellation, 30-hour battery life and a comfortable fit.", "In Stock"],
   ["Smart Watch Series 5", "TechGadget", "Electronics", 249.99, 4.8, "1523275335684-37898b6baf30", "Track workouts, heart rate and sleep. Water resistant with a bright AMOLED display.", "In Stock"],
-  ["Bluetooth Portable Speaker", "SoundHub", "Electronics", 59.99, 4.2, "1608043152269-423dbba4e7e1", "Compact waterproof speaker with powerful 360° sound and 12 hours of playtime.", "In Stock"],
+  ["Bluetooth Portable Speaker", "SoundHub", "Electronics", 59.99, 4.2, "1608043152269-423dbba4e7e1", "Compact waterproof speaker with powerful 360 sound and 12 hours of playtime.", "In Stock"],
   ["4K Action Camera", "TechGadget", "Electronics", 189.0, 4.5, "1526170375885-4d8ecf77b99f", "Capture adventures in crisp 4K with image stabilization and waterproof casing.", "In Stock"],
   ["Gaming Mouse RGB", "TechGadget", "Electronics", 49.99, 4.3, "1527814050087-3793815479db", "Ergonomic gaming mouse with 16,000 DPI sensor and customizable RGB lighting.", "In Stock"],
   ["Classic Denim Jacket", "Fashionista", "Fashion", 89.99, 4.4, "1521572163474-6864f9cf17ab", "Timeless denim jacket made from soft, durable cotton. A wardrobe essential.", "In Stock"],
@@ -59,11 +55,10 @@ const PRODUCTS = [
   ["World Atlas Illustrated", "BookWorm", "Books", 34.5, 4.7, "1524995997946-a1c2e315a42f", "Beautifully illustrated atlas with detailed maps and geography insights.", "In Stock"]
 ];
 
-// Carousel banners (1200px wide, verified HTTP 200)
 const BANNERS = [
-  ["1441986300917-64674bd600d8", "Welcome to ShopVerse", "Your one-stop destination for the best deals and newest arrivals."],
+  ["1441986300917-64674bd600d8", "Welcome to SHOPME", "Your one-stop destination for the best deals and newest arrivals."],
   ["1483985988355-763728e1935b", "New Arrivals", "Discover the trendiest products just added to our catalogue."],
   ["1472851294608-062f824d29cc", "Special Offers", "Up to 50% off on selected items. Limited time only!"]
 ];
 
-module.exports = { DB_NAME, CATEGORIES, SHOPS, OFFERS, PRODUCTS, IMG };
+module.exports = { DB_NAME, CATEGORIES, SHOPS, OFFERS, PRODUCTS, IMG, BANNERS };

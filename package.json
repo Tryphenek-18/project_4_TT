@@ -1,7 +1,7 @@
 {
-  "name": "shopverse",
+  "name": "shopme",
   "version": "1.0.0",
-  "description": "ShopVerse — Dynamic shopping website with a Node.js/Express backend",
+  "description": "SHOPME",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -10,14 +10,14 @@
   },
   "keywords": [
     "express",
-    "ecommerce",
-    "shopping",
-    "api"
+    "ecommerce"
   ],
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "express-session": "^1.19.0",
     "mysql2": "^3.24.3"
   },
   "devDependencies": {

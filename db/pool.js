@@ -1,14 +1,12 @@
 /* =========================================================
-   ShopVerse — MySQL connection pool
+   SHOPME — MySQL connection pool
    Credentials: root with NO password (local dev).
    Override via env vars: DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME
    ========================================================= */
 const mysql = require("mysql2/promise");
 
-const DB_NAME = process.env.DB_NAME || "shopverse";
+const DB_NAME = process.env.DB_NAME || "shopme";
 
-// The pool is created by initPool() AFTER db/bootstrap.js has created the
-// database — that way every pooled connection is bound to `shopverse`.
 let pool = null;
 
 function initPool() {
@@ -22,12 +20,11 @@ function initPool() {
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    dateStrings: true // `yyyy-mm-dd` TIMESTAMP values come back as strings
+    dateStrings: true
   });
   return pool;
 }
 
-/** Run a query with optional params. Returns [rows, fields]. */
 function query(sql, params) {
   if (!pool) throw new Error("Pool not initialised — call initPool() first");
   return pool.query(sql, params);
