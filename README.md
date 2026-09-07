@@ -7,18 +7,37 @@ backed by a Node.js + Express REST API.
 
 - **Frontend:** `public/` (HTML, CSS, **Bootstrap 5**, JavaScript)
 - **Backend:** Node.js + Express (`server.js`)
-- **Data:** In-memory store in `data/db.js` (products, shops, categories,
-  offers, orders)
+- **Database:** MySQL — database `shopverse`, user `root` with **no password**
+  (tables and seed data are created automatically on first start)
 
 ## Getting started
 
+### 1. One-time MySQL setup
+
+On Ubuntu, MySQL's root uses `auth_socket` by default, which Node cannot use.
+Run the provided script once (it asks for *your* Linux password):
+
 ```bash
-npm install      # install dependencies (express, cors, jsdom for tests)
-npm start        # start the server on http://localhost:3000
+sudo bash setup-db.sh
 ```
 
-The frontend at `http://localhost:3000/` now loads all its data (products,
-shops, categories, offers) from the API via `fetch()`.
+### 2. Install & run
+
+```bash
+npm install      # install dependencies (express, cors, mysql2, jsdom)
+npm start        # bootstrap the DB, then serve on http://localhost:3000
+```
+
+On first start the server automatically creates the `shopverse` database, its
+tables and the seed data (**20 products with real photos**, shops, categories,
+offers). Then open <http://localhost:3000>.
+
+> The page must be opened through the Express server — not with Live Server
+> or by double-clicking `index.html` — otherwise the API calls fail and a red
+> banner explains it.
+
+Connection settings can be overridden with env vars:
+`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`.
 
 ## API
 

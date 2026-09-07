@@ -75,7 +75,10 @@ async function init() {
     bindGlobalEvents();
   } catch (err) {
     console.error("Failed to load data from the API:", err);
-    document.getElementById("noProducts").classList.remove("d-none");
+    const apiError = document.getElementById("apiError");
+    if (apiError) apiError.classList.remove("d-none");
+    const noProd = document.getElementById("noProducts");
+    if (noProd) noProd.classList.add("d-none");
   }
 /* ---------- 5. RENDER SHOPS / CATEGORIES / OFFERS ---------- */
 function renderShops() {
@@ -180,7 +183,7 @@ function productCard(p) {
   <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
     <div class="card product-card h-100">
       <div class="product-img-wrapper">
-        <img src="${p.unique_photo}" class="card-img-top product-img" alt="${p.name}">
+        <img src="${p.image}" class="card-img-top product-img" alt="${p.name}">
         <button class="fav-btn ${favBtnClass}" data-fav-id="${p.id}" title="Toggle favorite" aria-label="Toggle favorite">
           <i class="bi ${favIcon}"></i>
         </button>
@@ -375,7 +378,7 @@ function updateCart() {
     if (!p) return "";
     return `
     <div class="cart-item">
-      <img src="${p.unique_photo}" alt="${p.name}">
+      <img src="${p.image}" alt="${p.name}">
       <div class="cart-item-info">
         <div class="d-flex justify-content-between align-items-start">
           <span class="cart-item-name">${p.name}</span>
@@ -477,7 +480,7 @@ function showModal(id) {
   document.getElementById("productModalBody").innerHTML = `
     <div class="row">
       <div class="col-md-5">
-        <img src="${p.unique_photo}" class="modal-product-img" alt="${p.name}">
+        <img src="${p.image}" class="modal-product-img" alt="${p.name}">
       </div>
       <div class="col-md-7">
         <span class="product-category mb-1">${p.category}</span>

@@ -1,6 +1,6 @@
 /* =========================================================
    ShopVerse — Express server
-   Serves the static frontend + a small REST API
+   Serves the static frontend + a small REST API backed by MySQL
    ========================================================= */
 const path = require("path");
 const express = require("express");
@@ -11,6 +11,7 @@ const shopsRouter = require("./routes/shops");
 const categoriesRouter = require("./routes/categories");
 const offersRouter = require("./routes/offers");
 const ordersRouter = require("./routes/orders");
+const { bootstrap } = require("./db/bootstrap");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,6 +45,20 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.listen(PORT, () => {
-  console.log(`ShopVerse server running at http://localhost:${PORT}`);
-});
+/* ---- Boot: bootstrap MySQL, then listen ---- */
+(async () => {
+  try {
+    await bootstrap();
+    app.listen(PORT, () => {
+      console.log(`ShopVerse server running at http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("\n[db] FATAL: could not initialise MySQL:", err.message);
+    console.error("[db] Hints:");
+    console.error("  - Is MySQL running?            sudo service mysql status");
+    console.error("  - root must allow passwordless access:");
+    console.error("      sudo mysql -e \"ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY ''; FLUSH PRIVILEGES;\"");
+    console.error("  - Or use a dedicated user via env vars: DB_USER, DB_PASS, DB_HOST, DB_NAME\n");
+    process.exit(1);
+  }
+})();
