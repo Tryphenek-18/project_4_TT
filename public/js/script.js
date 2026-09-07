@@ -1,174 +1,23 @@
 /* =========================================================
-   ShopVerse — JavaScript Logic
-   Products, Favorites, Cart, Search, Filters, Modal, Contact
+   ShopVerse — JavaScript Logic (frontend)
+   Data is fetched from the Node/Express API (/api/*).
    ========================================================= */
 
-/* ---------- 1. PRODUCT DATA ---------- */
-const products = [
-  {
-    id: 1,
-    name: "Wireless Noise-Cancelling Headphones",
-    shop: "TechGadget",
-    category: "Electronics",
-    price: 129.99,
-    rating: 4.6,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Premium over-ear headphones with active noise cancellation, 30-hour battery life, and a comfortable fit for all-day listening.",
-    availability: "In Stock"
-  },
-  {
-    id: 2,
-    name: "Smart Watch Series 5",
-    shop: "TechGadget",
-    category: "Electronics",
-    price: 249.99,
-    rating: 4.8,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Track your workouts, heart rate, and sleep with this sleek smart watch. Water resistant with a bright AMOLED display.",
-    availability: "In Stock"
-  },
-  {
-    id: 3,
-    name: "Bluetooth Portable Speaker",
-    shop: "SoundHub",
-    category: "Electronics",
-    price: 59.99,
-    rating: 4.2,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Compact waterproof speaker with powerful 360° sound and 12 hours of playtime. Perfect for the beach or home.",
-    availability: "In Stock"
-  },
-  {
-    id: 4,
-    name: "Classic Denim Jacket",
-    shop: "Fashionista",
-    category: "Fashion",
-    price: 89.99,
-    rating: 4.4,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Timeless denim jacket made from soft, durable cotton. A wardrobe essential that pairs with anything.",
-    availability: "In Stock"
-  },
-  {
-    id: 5,
-    name: "Leather Crossbody Bag",
-    shop: "Fashionista",
-    category: "Fashion",
-    price: 119.0,
-    rating: 4.7,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Elegant genuine leather crossbody bag with multiple compartments and an adjustable strap.",
-    availability: "Low Stock"
-  },
-  {
-    id: 6,
-    name: "Running Shoes Pro",
-    shop: "SportWorld",
-    category: "Sports",
-    price: 139.5,
-    rating: 4.5,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Lightweight running shoes with responsive cushioning and breathable mesh. Ideal for daily runs.",
-    availability: "In Stock"
-  },
-  {
-    id: 7,
-    name: "Yoga Mat Premium",
-    shop: "SportWorld",
-    category: "Sports",
-    price: 34.99,
-    rating: 4.1,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Extra-thick, non-slip yoga mat with alignment lines. Comes with a carrying strap.",
-    availability: "In Stock"
-  },
-  {
-    id: 8,
-    name: "Ceramic Coffee Mug Set",
-    shop: "HomeNest",
-    category: "Home & Living",
-    price: 24.99,
-    rating: 4.3,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Set of 4 beautifully glazed ceramic mugs, microwave and dishwasher safe.",
-    availability: "In Stock"
-  },
-  {
-    id: 9,
-    name: "LED Desk Lamp",
-    shop: "HomeNest",
-    category: "Home & Living",
-    price: 45.0,
-    rating: 4.0,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Adjustable LED desk lamp with 5 brightness levels and a USB charging port.",
-    availability: "Out of Stock"
-  },
-  {
-    id: 10,
-    name: "Bestselling Novel Collection",
-    shop: "BookWorm",
-    category: "Books",
-    price: 39.99,
-    rating: 4.9,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "A curated box set of three bestselling novels. Perfect for any book lover.",
-    availability: "In Stock"
-  },
-  {
-    id: 11,
-    name: "Cookbook: Fast & Healthy",
-    shop: "BookWorm",
-    category: "Books",
-    price: 18.5,
-    rating: 4.2,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Over 100 quick and nutritious recipes with beautiful photography and simple steps.",
-    availability: "Low Stock"
-  },
-  {
-    id: 12,
-    name: "Wireless Charging Pad",
-    shop: "TechGadget",
-    category: "Electronics",
-    price: 29.99,
-    rating: 4.0,
-    image: "https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop",
-    description: "Fast wireless charging pad compatible with all Qi-enabled devices.",
-    availability: "In Stock"
-  }
-];
-/* ---------- SHOP DATA ---------- */
-const shops = [
-  { name: "TechGadget", tagline: "Latest electronics & gadgets", icon: "bi-laptop", color: "#6f42c1" },
-  { name: "Fashionista", tagline: "Trendy fashion & accessories", icon: "bi-bag-heart", color: "#d63384" },
-  { name: "SportWorld", tagline: "Gear up for every sport", icon: "bi-bicycle", color: "#198754" },
-  { name: "HomeNest", tagline: "Cozy home & living essentials", icon: "bi-house-heart", color: "#fd7e14" },
-  { name: "SoundHub", tagline: "Audio that moves you", icon: "bi-music-note-beamed", color: "#0d6efd" },
-  { name: "BookWorm", tagline: "Stories worth reading", icon: "bi-book", color: "#dc3545" }
-];
+/* ---------- 1. GLOBAL STATE ---------- */
+let products = [];   // loaded from GET /api/products
+let shops = [];      // loaded from GET /api/shops
+let categories = []; // loaded from GET /api/categories
+let offers = [];     // loaded from GET /api/offers
 
-/* ---------- OFFERS ---------- */
-const offers = [
-  { title: "Summer Mega Sale", text: "Up to 50% OFF on all electronics", icon: "bi-lightning-charge", color: "#dc3545" },
-  { title: "Free Shipping", text: "On all orders over $100", icon: "bi-truck", color: "#198754" },
-  { title: "New User Deal", text: "Get 10% off your first purchase", icon: "bi-gift", color: "#6f42c1" },
-  { title: "Flash Discounts", text: "Daily deals updated every hour", icon: "bi-stopwatch", color: "#fd7e14" }
-];
+const API = {
+  products: "/api/products",
+  shops: "/api/shops",
+  categories: "/api/categories",
+  offers: "/api/offers",
+  orders: "/api/orders"
+};
 
-/* ---------- CATEGORIES (data-driven) ---------- */
-const categories = [
-  { name: "Electronics", icon: "bi-phone", color: "#0d6efd" },
-  { name: "Fashion", icon: "bi-bag-heart", color: "#d63384" },
-  { name: "Home & Living", icon: "bi-house-heart", color: "#fd7e14" },
-  { name: "Sports", icon: "bi-person-bounding-box", color: "#198754" },
-  { name: "Books", icon: "bi-book", color: "#dc3545" }
-];
-
-/* ---------- 2. HELPERS / STATE ---------- */
-const PRODUCT_IMG = (i) => `https://images.unsplash.com/photo-1441984912348?w=500&h=400&fit=crop&sig=${i}`;
-products.forEach((p, idx) => p.unique_photo = PRODUCT_IMG(idx + 1));
-
+/* ---------- 2. HELPERS ---------- */
 let cart = [];          // [{id, qty}]
 let favorites = [];     // [id]
 
@@ -188,7 +37,47 @@ function loadFavs() {
   catch (e) { favorites = []; }
 }
 
-/* ---------- 4. RENDER SHOPS / CATEGORIES / OFFERS ---------- */
+/* ---------- 4. API DATA LOADING ---------- */
+async function fetchJson(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`GET ${url} failed: ${res.status}`);
+  return res.json();
+}
+
+/** Load all site data from the backend, then populate the UI. */
+async function init() {
+  try {
+    const [pData, sData, cData, oData] = await Promise.all([
+      fetchJson(API.products),
+      fetchJson(API.shops),
+      fetchJson(API.categories),
+      fetchJson(API.offers)
+    ]);
+
+    products = pData.products;
+    shops = sData.shops;
+    categories = cData.categories;
+    offers = oData.offers;
+
+    // state + render
+    loadCart();
+    loadFavs();
+    document.getElementById("year").textContent = new Date().getFullYear();
+    initFilterOptions();
+    renderShops();
+    renderCategories();
+    renderOffers();
+    renderProducts();
+    renderFavorites();
+    updateCart();
+    updateFavCount();
+    createScrollTop();
+    bindGlobalEvents();
+  } catch (err) {
+    console.error("Failed to load data from the API:", err);
+    document.getElementById("noProducts").classList.remove("d-none");
+  }
+/* ---------- 5. RENDER SHOPS / CATEGORIES / OFFERS ---------- */
 function renderShops() {
   const grid = document.getElementById("shopsGrid");
   grid.innerHTML = shops.map(s => `
@@ -243,7 +132,8 @@ function renderOffers() {
       </div>
     </div>`).join("");
 }
-/* ---------- 5. RATING STARS ---------- */
+
+/* ---------- 6. RATING STARS ---------- */
 function starHTML(rating) {
   let html = "";
   for (let i = 1; i <= 5; i++) {
@@ -254,8 +144,8 @@ function starHTML(rating) {
   return `<span class="rating-stars">${html}</span> <span class="rating-num">(${rating})</span>`;
 }
 
-/* ---------- 6. FAVORITES HELPERS ---------- */
-const isFav = (id) => favorites.includes(id);
+/* ---------- 7. FAVORITES HELPERS ---------- */
+function isFav(id) { return favorites.includes(id); }
 
 function toggleFav(id, btnEl) {
   const idx = favorites.indexOf(id);
@@ -274,8 +164,7 @@ function toggleFav(id, btnEl) {
 function updateFavCount() {
   document.getElementById("favCountNav").textContent = favorites.length;
 }
-
-/* ---------- 7. PRODUCT CARD TEMPLATE ---------- */
+/* ---------- 8. PRODUCT CARD TEMPLATE ---------- */
 function productCard(p) {
   const fav = isFav(p.id);
   const favBtnClass = fav ? "active" : "";
@@ -317,7 +206,8 @@ function productCard(p) {
     </div>
   </div>`;
 }
-/* ---------- 8. SEARCH & FILTERS ---------- */
+
+/* ---------- 9. SEARCH & FILTERS ---------- */
 function getFilters() {
   return {
     search: (document.getElementById("navbarSearch").value || "").trim().toLowerCase(),
@@ -375,7 +265,7 @@ function renderProducts() {
   bindCardEvents();
 }
 
-/* ---------- 9. BIND EVENTS ON CURRENT PRODUCT CARDS ---------- */
+/* ---------- 10. BIND EVENTS ON CURRENT PRODUCT CARDS ---------- */
 function bindCardEvents() {
   document.querySelectorAll(".fav-btn").forEach(btn => {
     btn.addEventListener("click", () => toggleFav(parseInt(btn.dataset.favId), btn));
@@ -387,7 +277,8 @@ function bindCardEvents() {
     btn.addEventListener("click", () => showModal(parseInt(btn.dataset.view)));
   });
 }
-/* ---------- 10. FAVORITES SECTION ---------- */
+
+/* ---------- 11. FAVORITES SECTION ---------- */
 function renderFavorites() {
   const grid = document.getElementById("favoritesGrid");
   const noFav = document.getElementById("noFavorites");
@@ -408,8 +299,7 @@ function renderFavorites() {
     btn.addEventListener("click", () => showModal(parseInt(btn.dataset.view)));
   });
 }
-
-/* ---------- 11. CART LOGIC ---------- */
+/* ---------- 12. CART LOGIC ---------- */
 function getCartItem(id) { return cart.find(i => i.id === id); }
 
 function cartQty(id) {
@@ -526,7 +416,48 @@ function updateCart() {
     });
   });
 }
-/* ---------- 12. PRODUCT DETAIL MODAL ---------- */
+
+/* ---------- 13. CHECKOUT (posts the order to the backend) ---------- */
+async function checkout() {
+  if (cart.length === 0) return;
+  const msg = document.getElementById("checkoutMsg");
+  const btn = document.getElementById("checkoutBtn");
+
+  const payload = {
+    items: cart.map(i => ({ id: i.id, qty: i.qty })),
+    customer: { name: "ShopVerse Visitor", email: "visitor@shopverse.demo" }
+  };
+
+  btn.disabled = true;
+  try {
+    const res = await fetch(API.orders, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(`POST /api/orders failed: ${res.status}`);
+    const data = await res.json();
+
+    clearCart();
+    msg.classList.remove("d-none");
+    msg.innerHTML =
+      `<i class="bi bi-check-circle me-1"></i>Order #${data.order.id} placed! Thank you for shopping with us.`;
+  } catch (err) {
+    console.error(err);
+    msg.classList.remove("d-none");
+    msg.classList.remove("alert-success");
+    msg.classList.add("alert-danger");
+    msg.innerHTML = `<i class="bi bi-exclamation-triangle me-1"></i>Could not place your order. Please try again.`;
+  } finally {
+    btn.disabled = false;
+    setTimeout(() => {
+      msg.classList.add("d-none");
+      msg.classList.remove("alert-danger");
+      msg.classList.add("alert-success");
+    }, 4500);
+  }
+}
+/* ---------- 14. PRODUCT DETAIL MODAL ---------- */
 let modalProduct = null;
 
 function showModal(id) {
@@ -596,13 +527,7 @@ function renderModalHeart(id) {
     : '<i class="bi bi-heart me-1"></i>Add to Favorites';
 }
 
-/* Add footer container to the modal at runtime */
-document.addEventListener("DOMContentLoaded", () => {
-  const footer = document.querySelector("#productModal .modal-footer");
-  footer.id = "productModalFooter";
-});
-
-/* ---------- 13. CONTACT FORM VALIDATION ---------- */
+/* ---------- 15. CONTACT FORM VALIDATION ---------- */
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -638,7 +563,7 @@ function handleContactSubmit(e) {
   e.target.reset();
   success.classList.remove("d-none");
 }
-/* ---------- 14. SCROLL TO TOP BUTTON ---------- */
+/* ---------- 16. SCROLL TO TOP BUTTON ---------- */
 function createScrollTop() {
   const btn = document.createElement("button");
   btn.className = "scroll-top";
@@ -656,29 +581,8 @@ function createScrollTop() {
   });
 }
 
-/* ---------- 15. INITIALIZE ---------- */
-document.addEventListener("DOMContentLoaded", () => {
-  loadCart();
-  loadFavs();
-
-  // set footer year
-  document.getElementById("year").textContent = new Date().getFullYear();
-
-  // populate sort/filter dropdowns
-  initFilterOptions();
-
-  // render all dynamic sections
-  renderShops();
-  renderCategories();
-  renderOffers();
-  renderProducts();
-  renderFavorites();
-  updateCart();
-  updateFavCount();
-
-  createScrollTop();
-
-  // --- global event listeners ---
+/* ---------- 17. GLOBAL EVENT LISTENERS ---------- */
+function bindGlobalEvents() {
   document.getElementById("navbarSearch").addEventListener("input", renderProducts);
 
   document.getElementById("filterCategory").addEventListener("change", renderProducts);
@@ -701,13 +605,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.getElementById("checkoutBtn").addEventListener("click", () => {
-    if (cart.length === 0) return;
-    const msg = document.getElementById("checkoutMsg");
-    clearCart();
-    msg.classList.remove("d-none");
-    setTimeout(() => msg.classList.add("d-none"), 3500);
-  });
+  document.getElementById("checkoutBtn").addEventListener("click", checkout);
 
   document.getElementById("contactForm").addEventListener("submit", handleContactSubmit);
+}
+
+/* ---------- 18. INITIALIZE ---------- */
+document.addEventListener("DOMContentLoaded", () => {
+  // Ensure the modal footer has the id the app expects.
+  const footer = document.querySelector("#productModal .modal-footer");
+  if (footer) footer.id = "productModalFooter";
+
+  init();
 });
+}
